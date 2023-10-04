@@ -5,6 +5,9 @@ import usePageTitle from "../hooks/usePageTitle";
 import useRedirectActiveUser from "../hooks/useRedirectActiveUser";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { Avatar, Box, Button, TextField, Typography } from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { LoadingButton } from "@mui/lab";
 
 const Login = () => {
     usePageTitle();
@@ -44,53 +47,119 @@ const Login = () => {
 
     return (
         <>
-            <h1>Login</h1>
-            <Formik
-                initialValues={{ email: "", password: "" }}
-                onSubmit={onSubmit}
-                validationSchema={validationSchema}
-            >
-                {({
-                    values,
-                    handleChange,
-                    handleSubmit,
-                    errors,
-                    touched,
-                    handleBlur,
-                    isSubmitting,
-                }) => (
-                    <form onSubmit={handleSubmit}>
-                        <input
-                            type="text"
-                            placeholder="email"
-                            name="email"
-                            value={values.email}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                        />
-                        {errors.email && touched && errors.email}
-                        <br /> <br />
-                        <input
-                            type="password"
-                            placeholder="password"
-                            name="password"
-                            value={values.password}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                        />
-                        {errors.password && touched && errors.password}
-                        <br /> <br />
-                        <button type="submit" disabled={isSubmitting}>
-                            Login
-                        </button>
-                    </form>
-                )}
-            </Formik>
+            <Box
+                sx={{
+                    mt: 8,
 
-            <br />
-            <Link to="/register">
-                <button>Register</button>
-            </Link>
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                }}
+            >
+                <Box
+                    sx={{
+                        mb: 2,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: 1,
+                    }}
+                >
+                    <Avatar sx={{ bgcolor: "#007aff" }}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography
+                        component="h1"
+                        variant="h5"
+                        sx={{ fontWeight: "500" }}
+                    >
+                       Iniciar sesión
+                    </Typography>
+                </Box>
+
+                <Formik
+                    initialValues={{ email: "", password: "" }}
+                    onSubmit={onSubmit}
+                    validationSchema={validationSchema}
+                >
+                    {({
+                        values,
+                        handleChange,
+                        handleSubmit,
+                        errors,
+                        touched,
+                        handleBlur,
+                        isSubmitting,
+                    }) => (
+                        <Box
+                            onSubmit={handleSubmit}
+                            component="form"
+                            sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 2,
+                            }}
+                        >
+                            <TextField
+                                type="text"
+                                placeholder="test@example.com"
+                                value={values.email}
+                                onChange={handleChange}
+                                name="email"
+                                onBlur={handleBlur}
+                                id="email"
+                                label="Email"
+                                fullWidth
+                                error={errors.email && touched.email}
+                                helperText={errors.email}
+                            />
+                            <TextField
+                                type="password"
+                                placeholder="******"
+                                value={values.password}
+                                onChange={handleChange}
+                                name="password"
+                                onBlur={handleBlur}
+                                id="password"
+                                label="Contraseña"
+                                fullWidth
+                                error={errors.password && touched.password}
+                                helperText={errors.password}
+                            />
+
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    gap: 1,
+                                }}
+                            >
+                                <LoadingButton
+                                    sx={{ bgcolor: "#007aff" }}
+                                    disabled={isSubmitting}
+                                    loading={isSubmitting}
+                                    type="submit"
+                                    variant="contained"
+                                    fullWidth
+                                >
+                                    Iniciar sesión
+                                </LoadingButton>
+
+                                <Button
+                                    type="submit"
+                                    component={Link}
+                                    to="/register"
+                                    fullWidth
+                                >
+                                    ¿No tienes cuenta? Regístrate
+                                </Button>
+                            </Box>
+                        </Box>
+                    )}
+                </Formik>
+
+                <br />
+            </Box>
         </>
     );
 };
