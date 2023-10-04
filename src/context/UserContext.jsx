@@ -6,26 +6,43 @@ import { createContext } from "react";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../config/firebase";
+import { Box, CircularProgress } from "@mui/material";
 
 const UserContext = createContext();
 
 export default function UserContextProvider({ children }) {
-  const [user, setUser] = useState(false);
+    const [user, setUser] = useState(false);
 
-  useEffect(() => {
-    const unsuscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    useEffect(() => {
+        const unsuscribe = onAuthStateChanged(auth, (user) => {
+            setUser(user);
+        });
+
+        return unsuscribe;
     });
+    
 
-    return unsuscribe;
-  });
+    if (user === false)
+        return (
+            <>
+                <Box
+                    sx={{
+                        height: "100vh",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    <CircularProgress />
+                </Box>
+            </>
+        );
 
-  if (user === false) return <p>Cargando app...</p>;
-  return (
-    <UserContext.Provider value={{ user, setUser }}>
-      {children}
-    </UserContext.Provider>
-  );
+    return (
+        <UserContext.Provider value={{ user, setUser }}>
+            {children}
+        </UserContext.Provider>
+    );
 }
 
 export const useUserContext = () => useContext(UserContext);
